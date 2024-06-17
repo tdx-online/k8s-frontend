@@ -2,45 +2,46 @@
 import * as echarts from 'echarts'
 import { onMounted, onUnmounted, ref } from 'vue'
 import axios from 'axios'
+import { ElMessage } from 'element-plus'
 
 class Queue {
   constructor() {
     this.queue = []
   }
 
-  // Èë¶Ó²Ù×÷
+  // ï¿½ï¿½Ó²ï¿½ï¿½ï¿½
   enqueue(element) {
     this.queue.push(element)
   }
 
-  // ³ö¶Ó²Ù×÷
+  // ï¿½ï¿½ï¿½Ó²ï¿½ï¿½ï¿½
   dequeue() {
     if (this.isEmpty()) {
-      return '¶ÓÁÐÎª¿Õ'
+      return 'ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½'
     }
     return this.queue.shift()
   }
 
-  // ²é¿´¶ÓÊ×ÔªËØ
+  // ï¿½é¿´ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½
   peek() {
     if (this.isEmpty()) {
-      return '¶ÓÁÐÎª¿Õ'
+      return 'ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½'
     }
     return this.queue[0]
   }
 
-  // ¼ì²é¶ÓÁÐÊÇ·ñÎª¿Õ
+  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½
   isEmpty() {
     return this.queue.length === 0
   }
 
-  // »ñÈ¡¶ÓÁÐ´óÐ¡
+  // ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ð´ï¿½Ð¡
   size() {
     return this.queue.length
   }
 
   toArray() {
-    return this.queue.slice() // Ê¹ÓÃ slice À´¸´ÖÆÊý×é
+    return this.queue.slice() // Ê¹ï¿½ï¿½ slice ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   }
 }
 
@@ -77,10 +78,13 @@ const fetchData = async () => {
     createChart('nodes-chart', 'Nodes', k8sData.nodes)
     createChart('deployments-chart', 'Deployments', k8sData.deployments)
     createChart('services-chart', 'Services', k8sData.services)
-
-
   } catch (err) {
-    console.error(err)
+    ElMessage({
+      message: 'èŽ·å–é›†ç¾¤ä¿¡æ¯å¤±è´¥',
+      type: 'error',
+      duration: 2000
+    })
+    // console.error(err)
   }
 }
 
@@ -143,14 +147,14 @@ const createChart = (id, title, data) => {
 }
 
 
-// Êý¾Ý
+// ï¿½ï¿½ï¿½ï¿½
 const NodeCPUChartData = ref([])
 
-// »ñÈ¡Êý¾Ý²¢Ìî³ä nodeMetrics Í¼±í
+// ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ý²ï¿½ï¿½ï¿½ï¿½ nodeMetrics Í¼ï¿½ï¿½
 const initNodeCPUChart = async () => {
   try {
-    const response = await axios.get('/cluster-load') // ´Ó·þÎñÆ÷»ñÈ¡ nodeMetrics Êý¾ÝµÄÊ¾Àý¶Ëµã
-    NodeCPUChartData.value = response.data.nodeMetrics // ¼ÙÉè·þÎñÆ÷·µ»ØµÄÊý¾Ý¸ñÊ½ÊÇÕýÈ·µÄ£¬ÕâÀïÖ±½Ó½«Êý¾Ý¸³Öµ¸ø ref
+    const response = await axios.get('/cluster-load') // ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ nodeMetrics ï¿½ï¿½ï¿½Ýµï¿½Ê¾ï¿½ï¿½ï¿½Ëµï¿½
+    NodeCPUChartData.value = response.data.nodeMetrics // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Ê½ï¿½ï¿½ï¿½ï¿½È·ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Öµï¿½ï¿½ ref
     // console.log(NodeCPUChartData.value);
     // console.log(NodeCPUChartData.value.map(data => data.name));
     renderNodeCPUChart()
@@ -164,9 +168,9 @@ const renderNodeCPUChart = () => {
   if (!chartDomNodeCPU) return
   const nodeCPUChart = echarts.init(chartDomNodeCPU)
 
-  // È·±£ dataTime ºÍ dataNodeCPU ¶ÓÁÐÒÑ¾­±»Ìî³ä²¢ÇÒÓÐÊý¾Ý
-  const timeData = dataTime.toArray().map(time => String(time)) // È·±£×ª»»Îª×Ö·û´®Êý×é
-  const cpuData = dataNodeCPU.toArray() // Ö±½ÓÊ¹ÓÃtoArray½á¹û
+  // È·ï¿½ï¿½ dataTime ï¿½ï¿½ dataNodeCPU ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ä²¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  const timeData = dataTime.toArray().map(time => String(time)) // È·ï¿½ï¿½×ªï¿½ï¿½Îªï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  const cpuData = dataNodeCPU.toArray() // Ö±ï¿½ï¿½Ê¹ï¿½ï¿½toArrayï¿½ï¿½ï¿½
 
   const option = {
     title: { text: 'nodeCPU Usage' },
@@ -175,7 +179,7 @@ const renderNodeCPUChart = () => {
     series: [{
       name: 'CPU Usage',
       type: 'line',
-      data: cpuData, // ÕâÀï¼ÙÉè cpuData ÊÇÒ»¸öÊýÖµÊý×é
+      data: cpuData, // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ cpuData ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½
       areaStyle: {}
     }]
   }
@@ -185,11 +189,11 @@ const renderNodeCPUChart = () => {
 
 const NodeMemoryChartData = ref([])
 
-// »ñÈ¡Êý¾Ý²¢Ìî³ä nodeMetrics Í¼±í
+// ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ý²ï¿½ï¿½ï¿½ï¿½ nodeMetrics Í¼ï¿½ï¿½
 const initNodeMemoryChart = async () => {
   try {
-    const response = await axios.get('/cluster-load') // ´Ó·þÎñÆ÷»ñÈ¡ nodeMetrics Êý¾ÝµÄÊ¾Àý¶Ëµã
-    NodeMemoryChartData.value = response.data.nodeMetrics // ¼ÙÉè·þÎñÆ÷·µ»ØµÄÊý¾Ý¸ñÊ½ÊÇÕýÈ·µÄ£¬ÕâÀïÖ±½Ó½«Êý¾Ý¸³Öµ¸ø ref
+    const response = await axios.get('/cluster-load') // ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ nodeMetrics ï¿½ï¿½ï¿½Ýµï¿½Ê¾ï¿½ï¿½ï¿½Ëµï¿½
+    NodeMemoryChartData.value = response.data.nodeMetrics // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Ê½ï¿½ï¿½ï¿½ï¿½È·ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Öµï¿½ï¿½ ref
     // console.log(NodeCPUChartData.value);
     // console.log(NodeCPUChartData.value.map(data => data.name));
     renderNodeMemoryChart()
@@ -198,7 +202,7 @@ const initNodeMemoryChart = async () => {
   }
 }
 
-// äÖÈ¾ nodeMetrics Í¼±í
+// ï¿½ï¿½È¾ nodeMetrics Í¼ï¿½ï¿½
 const renderNodeMemoryChart = () => {
   // console.log("NodeCPUChartData.value");
   const chartDomNodeMemory = document.getElementById('nodeMetrics-chart-memory')
@@ -210,14 +214,14 @@ const renderNodeMemoryChart = () => {
     },
     xAxis: {
       type: 'category',
-      data: dataTime.toArray() // ¼ÙÉèÊý¾Ý¸ñÊ½Îª { time: '21:12', value: 0.1 }£¬ÕâÀïÌáÈ¡Ê±¼ä×÷Îª X ÖáÊý¾Ý
+      data: dataTime.toArray() // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Ê½Îª { time: '21:12', value: 0.1 }ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡Ê±ï¿½ï¿½ï¿½ï¿½Îª X ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     },
     yAxis: {
       type: 'value',
       name: 'Memory (ms)'
     },
     series: [{
-      data: dataNodeMemory.toArray(), // ÌáÈ¡ nodeMetrics Ê¹ÓÃÂÊ×÷Îª Y ÖáÊý¾Ý
+      data: dataNodeMemory.toArray(), // ï¿½ï¿½È¡ nodeMetrics Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª Y ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       type: 'line',
       areaStyle: {}
     }]
@@ -225,14 +229,14 @@ const renderNodeMemoryChart = () => {
   nodeMemoryChart.setOption(option)
 }
 
-// Êý¾Ý
+// ï¿½ï¿½ï¿½ï¿½
 const PodCPUChartData = ref([])
 
-// »ñÈ¡Êý¾Ý²¢Ìî³ä nodeMetrics Í¼±í
+// ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ý²ï¿½ï¿½ï¿½ï¿½ nodeMetrics Í¼ï¿½ï¿½
 const initPodCPUChart = async () => {
   try {
-    const response = await axios.get('/cluster-load') // ´Ó·þÎñÆ÷»ñÈ¡ nodeMetrics Êý¾ÝµÄÊ¾Àý¶Ëµã
-    PodCPUChartData.value = response.data.podMetrics // ¼ÙÉè·þÎñÆ÷·µ»ØµÄÊý¾Ý¸ñÊ½ÊÇÕýÈ·µÄ£¬ÕâÀïÖ±½Ó½«Êý¾Ý¸³Öµ¸ø ref
+    const response = await axios.get('/cluster-load') // ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ nodeMetrics ï¿½ï¿½ï¿½Ýµï¿½Ê¾ï¿½ï¿½ï¿½Ëµï¿½
+    PodCPUChartData.value = response.data.podMetrics // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Ê½ï¿½ï¿½ï¿½ï¿½È·ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Öµï¿½ï¿½ ref
     // console.log(NodeCPUChartData.value);
     // console.log(NodeCPUChartData.value.map(data => data.name));
     renderPodCPUChart()
@@ -241,7 +245,7 @@ const initPodCPUChart = async () => {
   }
 }
 
-// äÖÈ¾ podMetrics Í¼±í
+// ï¿½ï¿½È¾ podMetrics Í¼ï¿½ï¿½
 const renderPodCPUChart = () => {
   // console.log("NodeCPUChartData.value");
   const chartDomPodCPU = document.getElementById('podMetrics-chart-cpu')
@@ -253,14 +257,14 @@ const renderPodCPUChart = () => {
     },
     xAxis: {
       type: 'category',
-      data: dataTime.toArray() // ¼ÙÉèÊý¾Ý¸ñÊ½Îª { time: '21:12', value: 0.1 }£¬ÕâÀïÌáÈ¡Ê±¼ä×÷Îª X ÖáÊý¾Ý
+      data: dataTime.toArray() // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Ê½Îª { time: '21:12', value: 0.1 }ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡Ê±ï¿½ï¿½ï¿½ï¿½Îª X ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     },
     yAxis: {
       type: 'value',
       name: 'CPU (ms)'
     },
     series: [{
-      data: dataPodCPU.toArray(), // ÌáÈ¡ nodeMetrics Ê¹ÓÃÂÊ×÷Îª Y ÖáÊý¾Ý
+      data: dataPodCPU.toArray(), // ï¿½ï¿½È¡ nodeMetrics Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª Y ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       type: 'line',
       areaStyle: {}
     }]
@@ -268,14 +272,14 @@ const renderPodCPUChart = () => {
   podCPUChart.setOption(option)
 }
 
-// Êý¾Ý
+// ï¿½ï¿½ï¿½ï¿½
 const PodMemoryChartData = ref([])
 
-// »ñÈ¡Êý¾Ý²¢Ìî³ä nodeMetrics Í¼±í
+// ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ý²ï¿½ï¿½ï¿½ï¿½ nodeMetrics Í¼ï¿½ï¿½
 const initPodMemoryChart = async () => {
   try {
-    const response = await axios.get('/cluster-load') // ´Ó·þÎñÆ÷»ñÈ¡ nodeMetrics Êý¾ÝµÄÊ¾Àý¶Ëµã
-    PodMemoryChartData.value = response.data.podMetrics // ¼ÙÉè·þÎñÆ÷·µ»ØµÄÊý¾Ý¸ñÊ½ÊÇÕýÈ·µÄ£¬ÕâÀïÖ±½Ó½«Êý¾Ý¸³Öµ¸ø ref
+    const response = await axios.get('/cluster-load') // ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ nodeMetrics ï¿½ï¿½ï¿½Ýµï¿½Ê¾ï¿½ï¿½ï¿½Ëµï¿½
+    PodMemoryChartData.value = response.data.podMetrics // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Ê½ï¿½ï¿½ï¿½ï¿½È·ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Öµï¿½ï¿½ ref
     // console.log(NodeCPUChartData.value);
     // console.log(NodeCPUChartData.value.map(data => data.name));
     renderPodMemoryChart()
@@ -284,7 +288,7 @@ const initPodMemoryChart = async () => {
   }
 }
 
-// äÖÈ¾ PodMetrics Í¼±í
+// ï¿½ï¿½È¾ PodMetrics Í¼ï¿½ï¿½
 const renderPodMemoryChart = () => {
   // console.log("NodeCPUChartData.value");
   const chartDomPodMemory = document.getElementById('podMetrics-chart-memory')
@@ -296,14 +300,14 @@ const renderPodMemoryChart = () => {
     },
     xAxis: {
       type: 'category',
-      data: dataTime.toArray() // ¼ÙÉèÊý¾Ý¸ñÊ½Îª { time: '21:12', value: 0.1 }£¬ÕâÀïÌáÈ¡Ê±¼ä×÷Îª X ÖáÊý¾Ý
+      data: dataTime.toArray() // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Ê½Îª { time: '21:12', value: 0.1 }ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡Ê±ï¿½ï¿½ï¿½ï¿½Îª X ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     },
     yAxis: {
       type: 'value',
       name: 'CPU (ms)'
     },
     series: [{
-      data: dataPodMemory.toArray(), // ÌáÈ¡ nodeMetrics Ê¹ÓÃÂÊ×÷Îª Y ÖáÊý¾Ý
+      data: dataPodMemory.toArray(), // ï¿½ï¿½È¡ nodeMetrics Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª Y ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       type: 'line',
       areaStyle: {}
     }]
@@ -318,13 +322,13 @@ const dataPodMemory = new Queue()
 const dataTime = new Queue()
 
 const refreshPageAndLogTimestamp = async () => {
-  await fetchData();
-  const now = new Date() // »ñÈ¡µ±Ç°Ê±¼ä
-  // const timestamp = now.getTime(); // ×ª»»ÎªÊ±¼ä´Á
-// »ñÈ¡Ð¡Ê±ºÍ·ÖÖÓ
+  await fetchData()
+  const now = new Date() // ï¿½ï¿½È¡ï¿½ï¿½Ç°Ê±ï¿½ï¿½
+  // const timestamp = now.getTime(); // ×ªï¿½ï¿½ÎªÊ±ï¿½ï¿½ï¿½
+// ï¿½ï¿½È¡Ð¡Ê±ï¿½Í·ï¿½ï¿½ï¿½
   const minutes = now.getMinutes()
   const seconds = now.getSeconds()
-// ¸ñÊ½»¯Ð¡Ê±ºÍ·ÖÖÓÊä³ö
+// ï¿½ï¿½Ê½ï¿½ï¿½Ð¡Ê±ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
   console.log(`Current time: ${formattedTime}`)
 
@@ -335,8 +339,8 @@ const refreshPageAndLogTimestamp = async () => {
     dataTime.enqueue(formattedTime)
   }
   //dataNodeCPU
-  const responseCPU = await axios.get('/cluster-load') // ´Ó·þÎñÆ÷»ñÈ¡ nodeMetrics Êý¾ÝµÄÊ¾Àý¶Ëµã
-  NodeCPUChartData.value = responseCPU.data.nodeMetrics // ¼ÙÉè·þÎñÆ÷·µ»ØµÄÊý¾Ý¸ñÊ½ÊÇÕýÈ·µÄ£¬ÕâÀïÖ±½Ó½«Êý¾Ý¸³Öµ¸ø ref
+  const responseCPU = await axios.get('/cluster-load') // ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ nodeMetrics ï¿½ï¿½ï¿½Ýµï¿½Ê¾ï¿½ï¿½ï¿½Ëµï¿½
+  NodeCPUChartData.value = responseCPU.data.nodeMetrics // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Ê½ï¿½ï¿½ï¿½ï¿½È·ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Öµï¿½ï¿½ ref
   const totalCPU = NodeCPUChartData.value.reduce((total, node) => {
     return total + parseInt(node.cpu, 10)
   }, 0)
@@ -348,8 +352,8 @@ const refreshPageAndLogTimestamp = async () => {
   }
 
   //dataNodeMemory
-  const responseMemory = await axios.get('/cluster-load') // ´Ó·þÎñÆ÷»ñÈ¡ nodeMetrics Êý¾ÝµÄÊ¾Àý¶Ëµã
-  NodeCPUChartData.value = responseMemory.data.nodeMetrics // ¼ÙÉè·þÎñÆ÷·µ»ØµÄÊý¾Ý¸ñÊ½ÊÇÕýÈ·µÄ£¬ÕâÀïÖ±½Ó½«Êý¾Ý¸³Öµ¸ø ref
+  const responseMemory = await axios.get('/cluster-load') // ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ nodeMetrics ï¿½ï¿½ï¿½Ýµï¿½Ê¾ï¿½ï¿½ï¿½Ëµï¿½
+  NodeCPUChartData.value = responseMemory.data.nodeMetrics // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Ê½ï¿½ï¿½ï¿½ï¿½È·ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Öµï¿½ï¿½ ref
   const totalMemory = NodeCPUChartData.value.reduce((total, node) => {
     return total + parseInt(node.memory, 10)
   }, 0)
@@ -362,8 +366,8 @@ const refreshPageAndLogTimestamp = async () => {
   }
 
   //dataPodCPU
-  const responseDataPodCPU = await axios.get('/cluster-load') // ´Ó·þÎñÆ÷»ñÈ¡ nodeMetrics Êý¾ÝµÄÊ¾Àý¶Ëµã
-  NodeCPUChartData.value = responseDataPodCPU.data.nodeMetrics // ¼ÙÉè·þÎñÆ÷·µ»ØµÄÊý¾Ý¸ñÊ½ÊÇÕýÈ·µÄ£¬ÕâÀïÖ±½Ó½«Êý¾Ý¸³Öµ¸ø ref
+  const responseDataPodCPU = await axios.get('/cluster-load') // ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ nodeMetrics ï¿½ï¿½ï¿½Ýµï¿½Ê¾ï¿½ï¿½ï¿½Ëµï¿½
+  NodeCPUChartData.value = responseDataPodCPU.data.nodeMetrics // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Ê½ï¿½ï¿½ï¿½ï¿½È·ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Öµï¿½ï¿½ ref
   const totalDataPodCPU = PodCPUChartData.value.reduce((total, node) => {
     return total + parseInt(node.cpu, 10)
   }, 0)
@@ -376,8 +380,8 @@ const refreshPageAndLogTimestamp = async () => {
   }
 
   //dataPodCPU
-  const responseDataPodMemory = await axios.get('/cluster-load') // ´Ó·þÎñÆ÷»ñÈ¡ nodeMetrics Êý¾ÝµÄÊ¾Àý¶Ëµã
-  NodeCPUChartData.value = responseDataPodMemory.data.nodeMetrics // ¼ÙÉè·þÎñÆ÷·µ»ØµÄÊý¾Ý¸ñÊ½ÊÇÕýÈ·µÄ£¬ÕâÀïÖ±½Ó½«Êý¾Ý¸³Öµ¸ø ref
+  const responseDataPodMemory = await axios.get('/cluster-load') // ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ nodeMetrics ï¿½ï¿½ï¿½Ýµï¿½Ê¾ï¿½ï¿½ï¿½Ëµï¿½
+  NodeCPUChartData.value = responseDataPodMemory.data.nodeMetrics // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Ê½ï¿½ï¿½ï¿½ï¿½È·ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½Öµï¿½ï¿½ ref
   const totalDataPodMemory = PodCPUChartData.value.reduce((total, node) => {
     return total + parseInt(node.memory, 10)
   }, 0)
@@ -395,11 +399,11 @@ const refreshPageAndLogTimestamp = async () => {
   await initPodMemoryChart()
 }
 
-let intervalId // ÉùÃ÷Ò»¸ö±äÁ¿ÓÃÓÚ±£´æ¶¨Ê±Æ÷µÄID
+let intervalId // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú±ï¿½ï¿½æ¶¨Ê±ï¿½ï¿½ï¿½ï¿½ID
 onMounted(() => {
   // fetchData()
-  // Ã¿¸ô5Ãëµ÷ÓÃÒ»´ÎrefreshPageAndLogTimestampº¯Êý
-  // È·±£±£´æ·µ»ØµÄ¶¨Ê±Æ÷ID
+  // Ã¿ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½refreshPageAndLogTimestampï¿½ï¿½ï¿½ï¿½
+  // È·ï¿½ï¿½ï¿½ï¿½ï¿½æ·µï¿½ØµÄ¶ï¿½Ê±ï¿½ï¿½ID
   refreshPageAndLogTimestamp()
   intervalId = setInterval(async () => {
     await refreshPageAndLogTimestamp()
@@ -413,12 +417,12 @@ onUnmounted(() => {
 
 <template>
   <div class="container">
-    <!-- µÚÒ»ÐÐ -->
+    <!-- ï¿½ï¿½Ò»ï¿½ï¿½ -->
     <div id="nodeMetrics-chart-cpu" class="chart "></div>
     <div id="podMetrics-chart-cpu" class="chart "></div>
     <div id="nodeMetrics-chart-memory" class="chart "></div>
     <div id="podMetrics-chart-memory" class="chart "></div>
-    <!-- µÚ¶þÐÐ -->
+    <!-- ï¿½Ú¶ï¿½ï¿½ï¿½ -->
     <div id="pods-chart" class="chart"></div>
     <div id="nodes-chart" class="chart"></div>
     <div id="deployments-chart" class="chart"></div>
@@ -429,8 +433,8 @@ onUnmounted(() => {
 <style scoped>
 .container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* ¶¨ÒåËÄÁÐ£¬Ã¿ÁÐ¿í¶ÈÏàµÈ */
-  grid-template-rows: 1fr 1fr; /* ¶¨ÒåÁ½ÐÐ£¬µÚÒ»ÐÐ¸ß¶È×Ô¶¯µ÷Õû£¬µÚ¶þÐÐ¸ß¶ÈÏàµÈ */
+  grid-template-columns: repeat(4, 1fr); /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½Ã¿ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½ï¿½ */
+  grid-template-rows: 1fr 1fr; /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½Ò»ï¿½Ð¸ß¶ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½Ð¸ß¶ï¿½ï¿½ï¿½ï¿½ */
   width: 100vw;
   height: 90vh;
   gap: 0;
@@ -443,7 +447,7 @@ onUnmounted(() => {
   height: 100%;
 }
 
-/*!* ¿ØÖÆÍ¼±íÁÐÊý *!*/
+/*!* ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ *!*/
 /*.col-2 {*/
 /*  grid-column: span 2;*/
 /*}*/
