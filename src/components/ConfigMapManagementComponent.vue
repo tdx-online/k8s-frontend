@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import yaml from 'js-yaml'
@@ -10,6 +10,7 @@ const currentPage = ref(1)
 const totalItems = ref(tableData.value.length) // 总条目数
 const dialogVisible = ref(false)
 const newConfigMapData = ref('')
+let fetchInterval = null
 
 // 根据当前页和分页大小计算显示的数据
 const currentTableData = computed(() => {
@@ -110,7 +111,16 @@ const createConfigMap = () => {
     })
   })
 }
-fetchConfigMaps()
+
+onMounted(() =>{
+  fetchConfigMaps()
+  fetchInterval = setInterval(fetchConfigMaps, 5000)
+})
+
+onUnmounted(()=>{
+  clearInterval(fetchInterval)
+})
+
 </script>
 
 <template>
