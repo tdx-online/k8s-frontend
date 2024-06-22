@@ -7,7 +7,7 @@ import { ElMessage } from 'element-plus'
 const tableData = ref([])
 const pageSize = ref(10)
 const currentPage = ref(1)
-const totalItems = ref(tableData.value.length) // 总条目数
+const totalItems = ref(0) // 总条目数
 const dialogVisible = ref(false)
 const newPodData = ref('')
 let fetchInterval = null
@@ -17,6 +17,9 @@ let fetchInterval = null
 const currentTableData = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value
   const end = start + pageSize.value
+  if (tableData.value === null) {
+    return []
+  }
   return tableData.value.slice(start, end)
 })
 
@@ -34,13 +37,13 @@ const handleCurrentChange = (newPage) => {
 const updateCurrentTableData = () => {
   const start = (currentPage.value - 1) * pageSize.value
   const end = start + pageSize.value
-  currentTableData.value = tableData.value.slice(start, end)
+  currentTableData.value = tableData.value === null ? 0 : tableData.value.slice(start, end)
 }
 
 const fetchPods = () => {
   axios.get('/pods').then(res => {
     tableData.value = res.data
-    totalItems.value = tableData.value.length
+    totalItems.value = tableData.value === null ? 0 : tableData.value.length
     currentPage.value = 1
   })
 }
@@ -156,7 +159,7 @@ onUnmounted(() => {
     </el-table-column>
   </el-table>
 
-  <el-pagination v-if="tableData.length > 0"
+  <el-pagination v-if="tableData === null ? false : tableData.length > 0"
                  @size-change="handleSizeChange"
                  @current-change="handleCurrentChange"
                  :current-page="currentPage"
